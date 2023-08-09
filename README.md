@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://www.permit.io">
+  <a href="https://www.permit.io/?utm_source=github&utm_medium=referral&utm_campaign=ghc">
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://github.com/permitio/Galactic-Health-Corporation/assets/4082578/56794ab6-8ae6-4676-bba7-8d38eeeb1c89">
       <img src="https://github.com/permitio/Galactic-Health-Corporation/assets/4082578/c1f1540b-083a-4a12-9b7b-8a02884db3db" height="128">
