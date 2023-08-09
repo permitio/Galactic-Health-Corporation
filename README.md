@@ -1,4 +1,13 @@
-# Galactic Health Corporation - Permissions Demo
+<div align="center">
+  <a href="https://www.permit.io">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/permitio/Galactic-Health-Corporation/assets/4082578/56794ab6-8ae6-4676-bba7-8d38eeeb1c89">
+      <img src="https://github.com/permitio/Galactic-Health-Corporation/assets/4082578/c1f1540b-083a-4a12-9b7b-8a02884db3db" height="128">
+    </picture>
+    <h1 align="center">Galactic Health Corporation</h1>
+  </a>
+</div>
+
 Galactic Health Corporation is a sample application that demonstrates all the common application permission models (RBAC, ABAC and ReBAC), in one healthcare application.
 The application is using the [Permit.io](https://permit.io) low-code solution to manage the following features:
 
