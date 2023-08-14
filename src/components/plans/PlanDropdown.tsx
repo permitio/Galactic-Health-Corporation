@@ -49,7 +49,7 @@ export default function PlanDropdown() {
         setCurrentUser(selectedUser ?? null); // selectedUserId
     };
 
-    if (loading) {
+    if (loading || users.length === 0) {
         return <Skeleton variant="rectangular" width={200} height={40} />;
     }
 

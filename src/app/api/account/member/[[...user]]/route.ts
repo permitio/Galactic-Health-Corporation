@@ -15,7 +15,7 @@ const GET = async (
 
     const memberGroups = await permit.api.roleAssignments.list({
         user: userId || '',
-        role: 'org_member',
+        role: 'admin',
     });
 
     const filtered: string[] = [];
@@ -29,7 +29,6 @@ const GET = async (
     }
 
     const allowed = Array.from(new Set(filtered));
-
 
     return NextResponse.json(
         Object.keys(users).filter((id) => (id !== userId) && allowed.includes(id)).map((id) => ({
