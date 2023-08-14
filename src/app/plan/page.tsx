@@ -74,6 +74,9 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (currentUser) {
+            setUserProfile(null);
+            setHealthPlan(null);
+            setMedicalRecords(null);
             // Fetching user profile data
             fetch(`/api/account/profile/${currentUser.id}`)
                 .then((response) => {
@@ -145,7 +148,7 @@ const Dashboard = () => {
                 />
             )}
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {permitState?.check('view', 'benefits_pg') && (
+                {loggedInUser?.id === currentUser?.id && permitState?.check('view', 'benefits_pg') && (
                     <div className="bg-white shadow overflow-hidden sm:rounded-lg bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-1">
                         <div className="h-full w-full bg-white rounded">
                             <div className="px-4 py-5 sm:px-6">
@@ -168,7 +171,7 @@ const Dashboard = () => {
                                             <dd className="mt-1 text-sm text-gray-900">
                                                 {
                                                     personalBenefits[
-                                                        key as keyof typeof personalBenefits
+                                                    key as keyof typeof personalBenefits
                                                     ]
                                                 }
                                                 <IconButton
@@ -190,7 +193,7 @@ const Dashboard = () => {
                     </div>
                 )}
 
-                {permitState?.check('view', 'alt_medicine_pg') && (
+                {loggedInUser?.id === currentUser?.id && permitState?.check('view', 'alt_medicine_pg') && (
                     <div className="bg-white shadow overflow-hidden sm:rounded-lg bg-gradient-to-r from-green-500 via-purple-500 to-blue-500 p-1">
                         <div className="h-full w-full bg-white rounded">
                             <div className="px-4 py-5 sm:px-6">

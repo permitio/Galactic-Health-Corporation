@@ -10,9 +10,10 @@ export default function ShareAccess() {
     const { formState, setFormState } = useContext(WizardFormContext);
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value as SharingOptions;
         setFormState((prevFormState) => ({
             ...prevFormState,
-            whatToShareOption: event.target.value,
+            whatToShareOption: value,
         }));
     };
 

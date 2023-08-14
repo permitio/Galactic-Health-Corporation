@@ -1,3 +1,5 @@
+import { UserRead } from "permitio";
+
 export enum SharingOptions {
     member = 'member',
     health_plan = 'health_plan',
@@ -22,3 +24,8 @@ export type Caregiver = {
     endDate: string;
 }
 
+export type MemberGroup = {
+    key: string;
+    name: string;
+    members: UserRead[];
+}

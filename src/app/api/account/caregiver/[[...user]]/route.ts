@@ -6,6 +6,19 @@ import path from 'path';
 import { promises as fs } from 'fs';
 import { permit } from '@/app/api/authorizer';
 
+type CaregiverAttributes = {
+    caregiver_bounds: {
+        [key: string]: {
+            start_date: string;
+            end_date: string;
+        }
+    }
+};
+
+type CaregiverUser = UserRead & {
+    attributes: CaregiverAttributes;
+}
+
 const POST = async (
     request: NextRequest,
     { params }: { params: { user: string[] } }) => {
@@ -25,7 +38,7 @@ const POST = async (
     const { user, resource, startDate: start_date, endDate: end_date } = await request.json() as Caregiver;
     const resourceInstance = `${resource}:${resource}_${uid}`;
 
-    const userRead = await permit.api.getUser(user as string) as UserRead;
+    const userRead = await permit.api.getUser(user as string) as CaregiverUser;
 
     await permit.api.users.update(user as string, {
         attributes: {
@@ -66,7 +79,7 @@ const DELETE = async (
     const resource = params.user?.[1] || '';
     const resourceInstance = `${resource}:${resource}_${userId}`;
 
-    const user = await permit.api.getUser(uid);
+    const user = await permit.api.getUser(uid) as CaregiverUser;
 
     delete user?.attributes?.caregiver_bounds?.[resourceInstance];
 
@@ -110,13 +123,13 @@ const GET = async (request: NextRequest, { params }: { params: { user: string[] 
         ({ resource_instance = '' }) => (resource_instance?.indexOf(userId || '') > -1)
     );
 
-    const permitUsers = await Promise.all(caregiverUsers.map(({ user }) => permit.api.getUser(user as string)));
+    const permitUsers = await Promise.all(caregiverUsers.map(({ user }) => permit.api.getUser(user as string))) as CaregiverUser[];
 
-    const res = caregiverUsers.map(({ user, resource_instance }): Caregiver => ({
+    const res = caregiverUsers.map(({ user, resource_instance = '' }): Caregiver => ({
         user: { id: user, ...users[user as string] } as Person,
         resource: resource_instance?.substring(0, resource_instance.indexOf(':')) as SharingOptions,
-        startDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.start_date,
-        endDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.end_date,
+        startDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.start_date || '', 
+        endDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.end_date || '',
     }));
 
     return NextResponse.json(res || []);
