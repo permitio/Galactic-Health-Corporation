@@ -27,16 +27,14 @@ export default authMiddleware({
       }
     });
 
-    console.log('url', url);
-
-    const { pathname, protocol, host } = new URL(url);
+    const { pathname, protocol, host } = new URL(process.env.APP_URL ? process.env.APP_URL : url);
 
     if (user.status === 200 && pathname.indexOf('/welcome') === -1) {
       return;
     }
 
     if (user.status === 200 && pathname.indexOf('/welcome') >= 0) {
-      return NextResponse.redirect(new URL('/', url));
+      return NextResponse.redirect(`${protocol}//${host}`);
     }
 
     if (pathname.indexOf('/welcome') >= 0) {
@@ -44,7 +42,7 @@ export default authMiddleware({
     }
 
     if (!isPublicRoute) {
-      return NextResponse.redirect(new URL('/welcome', url));
+      return NextResponse.redirect(`${protocol}//${host}/welcome`);
     }
   },
 });
