@@ -8,9 +8,11 @@ import { NextResponse } from "next/server";
 export default authMiddleware({
   publicRoutes: ["/api/account/dashboard/health-benefits"],
   afterAuth: async ({ userId, session, isPublicRoute, ...auth }, { url }) => {
+    const { pathname, protocol, host } = new URL(process.env.APP_URL ? process.env.APP_URL : url);
+
     // handle users who aren't authenticated
     if (!userId && !isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: url });
+      return redirectToSignIn({ returnBackUrl: `${protocol}//${host}{pathname}` });
     }
 
     const { project_id, environment_id } = await fetch('https://api.permit.io/v2/api-key/scope', {
@@ -26,10 +28,6 @@ export default authMiddleware({
         'Content-Type': 'application/json',
       }
     });
-
-    const { pathname, protocol, host } = new URL(process.env.APP_URL ? process.env.APP_URL : url);
-
-    console.log(process.env.APP_URL, url, pathname, protocol, host, user.status);
 
     if (user.status === 200 && pathname.indexOf('/welcome') === -1) {
       return;
