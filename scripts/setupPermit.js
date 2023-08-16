@@ -284,90 +284,10 @@ const createRoleDerivations = async () => {
     });
 };
 
-const createUsers = async () => {
-    const jsonDirectory = path.join(process.cwd(), 'data');
-    const appData = await fs.readFile(jsonDirectory + '/data.json', 'utf8');
-    const users = JSON.parse(appData)?.users || {};
-    for (const [
-        id,
-        { email, firstName, lastName, groups, ...attributes },
-    ] of Object.entries(users)) {
-        console.log(`Creating user: ${email}`);
-        const createdUser = await permit.api.syncUser({
-            key: id,
-            email,
-            first_name: firstName,
-            last_name: lastName,
-            attributes,
-        });
-        console.log(`Created user: ${createdUser.key}`);
-
-        console.log(`Assigning user: ${email} to their member resource`);
-        await permit.api.roleAssignments.assign({
-            user: createdUser.key,
-            role: 'owner',
-            resource_instance: `member:member_${createdUser.key}`,
-            tenant: 'default',
-        });
-
-        console.log(`Assigning user: ${email} to their member groups`);
-        for (const group of groups) {
-            await permit.api.roleAssignments.assign({
-                user: createdUser.key,
-                role: 'org_member',
-                resource_instance: `member_group:member_group_${group}`,
-                tenant: 'default',
-            });
-
-            await permit.api.relationshipTuples.create({
-                subject: `member_group:member_group_${group}`,
-                relation: 'belongs',
-                object: `profile:profile_${createdUser.key}`,
-                tenant: 'default',
-            });
-        }
-
-        console.log(
-            `Create relationship tuples for profile, health_plan, and medical_records`,
-        );
-        await permit.api.relationshipTuples.create({
-            subject: `member:member_${createdUser.key}`,
-            relation: 'parent',
-            object: `profile:profile_${createdUser.key}`,
-            tenant: 'default',
-        });
-
-        await permit.api.relationshipTuples.create({
-            subject: `member:member_${createdUser.key}`,
-            relation: 'parent',
-            object: `health_plan:health_plan_${createdUser.key}`,
-            tenant: 'default',
-        });
-
-        await permit.api.relationshipTuples.create({
-            subject: `member:member_${createdUser.key}`,
-            relation: 'parent',
-            object: `medical_records:medical_records_${createdUser.key}`,
-            tenant: 'default',
-        });
-
-        if (email === 'rick@sanchez.app') {
-
-            await permit.api.assignRole({
-                role: 'benefits_pg_role',
-                tenant: 'default',
-                user: createdUser.key,
-            });
-        }
-    }
-};
-
-
 (async () => {
     await cleanEnv();
     await createResources();
     await createResourceRelations();
     await createRoleDerivations();
-    await createUsers();
     console.log('Done');
 })();

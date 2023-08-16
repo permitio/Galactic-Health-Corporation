@@ -20,7 +20,7 @@ export default function DelegatePermissions() {
             </h1>
             <div className="flex flex-col mt-4">
                 <span className="text-sm md:text-base">
-                    If you'd like others to have access to your health plan, you
+                    If you&#39;d like others to have access to your health plan, you
                     have options for what your share.
                 </span>
                 <Link href="#" className="mt-3 mb-3 text-sky-600 text-medium">

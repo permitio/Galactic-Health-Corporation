@@ -32,6 +32,13 @@ const createMemberGroup = async (userId: string, name: string) => {
             resource_instance: `member_group:${key}`,
         });
 
+        await permit.api.relationshipTuples.create({
+            subject: `member_group:${key}`,
+            relation: 'belongs',
+            object: `profile:profile_${userId}`,
+            tenant: 'default',
+        });
+
         return NextResponse.json(group);
     } catch (e) {
         const { response } = e as PermitApiError<any>;
@@ -57,14 +64,14 @@ const assignMemberGroup = async (userId: string, email: string, group: string) =
     try {
         const users = await permit.api.listUsers();
         const assignedUser = users.find(({ email: userEmail }) => (userEmail === email))?.id || '';
-    
+
         await permit.api.roleAssignments.assign({
             user: assignedUser,
             role: 'org_member',
             resource_instance: `member_group:${group}`,
             tenant: 'default',
         });
-    
+
         await permit.api.relationshipTuples.create({
             subject: `member_group:${group}`,
             relation: 'belongs',
@@ -98,14 +105,14 @@ const unassignMemberGroup = async (userId: string, email: string, group: string)
     try {
         const users = await permit.api.listUsers();
         const assignedUser = users.find(({ email: userEmail }) => (userEmail === email))?.id || '';
-    
+
         await permit.api.roleAssignments.unassign({
             user: assignedUser,
             role: 'org_member',
             resource_instance: `member_group:${group}`,
             tenant: 'default',
         });
-    
+
         await permit.api.relationshipTuples.delete({
             subject: `member_group:${group}`,
             relation: 'belongs',
