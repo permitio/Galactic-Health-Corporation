@@ -27,6 +27,8 @@ export default authMiddleware({
       }
     });
 
+    console.log('url', url);
+
     const { pathname, protocol, host } = new URL(url);
 
     if (user.status === 200 && pathname.indexOf('/welcome') === -1) {
