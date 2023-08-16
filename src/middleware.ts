@@ -29,6 +29,8 @@ export default authMiddleware({
 
     const { pathname, protocol, host } = new URL(process.env.APP_URL ? process.env.APP_URL : url);
 
+    console.log(process.env.APP_URL, url, pathname, protocol, host, user.status);
+
     if (user.status === 200 && pathname.indexOf('/welcome') === -1) {
       return;
     }
