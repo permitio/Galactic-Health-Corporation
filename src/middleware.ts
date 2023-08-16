@@ -12,7 +12,7 @@ export default authMiddleware({
 
     // handle users who aren't authenticated
     if (!userId && !isPublicRoute) {
-      return redirectToSignIn({ returnBackUrl: `${protocol}//${host}{pathname}` });
+      return redirectToSignIn({ returnBackUrl: `${protocol}//${host}${pathname}` });
     }
 
     const { project_id, environment_id } = await fetch('https://api.permit.io/v2/api-key/scope', {
