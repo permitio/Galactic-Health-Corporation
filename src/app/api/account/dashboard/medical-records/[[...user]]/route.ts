@@ -1,9 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Permit } from 'permitio';
-import path from 'path';
-import { promises as fs } from 'fs';
+
 import { getAuth } from '@clerk/nextjs/server';
 import { permit } from "@/app/api/authorizer";
+
+const generateRandomMedicalRecords = () => {
+    const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+    const bloodType = bloodTypes[Math.floor(Math.random() * bloodTypes.length)];
+    const allergiesOptions = ['Peanuts', 'Shellfish', 'Eggs', 'Milk', 'Wheat', 'Soy', 'Tree Nuts', 'Fish'];
+    const allergies = new Array(Math.floor(Math.random() * 5)).fill(0).map(() => allergiesOptions[Math.floor(Math.random() * allergiesOptions.length)]);
+    return {
+        bloodType,
+        allergies
+    }
+};
 
 const GET = async (
     request: NextRequest,
@@ -20,10 +29,7 @@ const GET = async (
         return NextResponse.json({ error: 'Not allowed' }, { status: 403 });
     }
 
-    const jsonDirectory = path.join(process.cwd(), 'data');
-    const appData = await fs.readFile(jsonDirectory + '/data.json', 'utf8');
-
-    return NextResponse.json(JSON.parse(appData)?.medical_records?.[`medical_records_${uid}`] || {});
+    return NextResponse.json(generateRandomMedicalRecords());
 }
 
 export { GET };

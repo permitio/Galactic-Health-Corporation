@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth } from '@clerk/nextjs/server';
 import { UserRead } from 'permitio';
-import { Caregiver, Person, SharingOptions } from '@/models/models';
-import path from 'path';
-import { promises as fs } from 'fs';
-import { permit } from '@/app/api/authorizer';
+import { Caregiver, SharingOptions } from '@/models/models';
+import { UserProfile, permit, permitProfile } from '@/app/api/authorizer';
 
 type CaregiverAttributes = {
     caregiver_bounds: {
@@ -42,13 +40,15 @@ const POST = async (
 
     await permit.api.users.update(user as string, {
         attributes: {
+            ...userRead?.attributes,
             caregiver_bounds: {
                 ...userRead?.attributes?.caregiver_bounds,
                 [resourceInstance]: {
                     start_date,
                     end_date,
                 },
-            }
+            },
+
         }
     });
 
@@ -85,6 +85,7 @@ const DELETE = async (
 
     await permit.api.users.update(uid, {
         attributes: {
+            ...user?.attributes,
             caregiver_bounds: user?.attributes?.caregiver_bounds
         }
     });
@@ -99,10 +100,6 @@ const DELETE = async (
 }
 
 const GET = async (request: NextRequest, { params }: { params: { user: string[] } }) => {
-    const jsonDirectory = path.join(process.cwd(), 'data');
-    const appData = await fs.readFile(jsonDirectory + '/data.json', 'utf8');
-    const users = JSON.parse(appData)?.users || {};
-
     const { userId } = getAuth(request) || '';
 
     const allowed = await permit.check(userId || '', 'write', {
@@ -114,7 +111,7 @@ const GET = async (request: NextRequest, { params }: { params: { user: string[] 
         return NextResponse.json({ error: 'Not allowed' }, { status: 403 });
     }
 
-
+    const users = await permit.api.listUsers();
     const caregivers = await permit.api.roleAssignments.list({
         role: 'caregiver',
     });
@@ -126,9 +123,9 @@ const GET = async (request: NextRequest, { params }: { params: { user: string[] 
     const permitUsers = await Promise.all(caregiverUsers.map(({ user }) => permit.api.getUser(user as string))) as CaregiverUser[];
 
     const res = caregiverUsers.map(({ user, resource_instance = '' }): Caregiver => ({
-        user: { id: user, ...users[user as string] } as Person,
+        user: permitProfile(users.find(({ key }) => key === user) as UserProfile),
         resource: resource_instance?.substring(0, resource_instance.indexOf(':')) as SharingOptions,
-        startDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.start_date || '', 
+        startDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.start_date || '',
         endDate: permitUsers.find(({ key }) => key === user)?.attributes?.caregiver_bounds?.[resource_instance]?.end_date || '',
     }));
 

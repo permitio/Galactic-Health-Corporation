@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Skeleton } from '@mui/material';
 import { Person } from '@/models/models';
+import Link from 'next/link';
 
 
 export default function ShareAccess() {
@@ -61,7 +62,7 @@ export default function ShareAccess() {
                     <>
                         <p className="font-semibold">No members found.</p>
                         <p className="text-gray-500">
-                            To add a member, please call member services at 1-800-555-5555.
+                            To add a member, <Link href='/access'>add them to your member groups</Link> in your account.
                         </p>
                     </>
                 )}

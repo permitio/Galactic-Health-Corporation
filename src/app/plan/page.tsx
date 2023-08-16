@@ -398,17 +398,20 @@ const Dashboard = () => {
                             <dt className="text-sm font-medium text-gray-500">
                                 Claims
                             </dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:flex sm:justify-between">
+                            <dd className="mt-1 text-sm text-gray-900 sm:flex sm:justify-between overflow-x-auto">
                                 {healthPlan.claims.map((claim, index) => (
-                                    <div key={index} className="mt-2 sm:mt-0">
+                                    <div key={index} className="mt-2 sm:mt-0 min-w-[33%] pr-1">
                                         <div className="text-sm text-gray-900">
-                                            {claim.date} - {claim.provider}
+                                            {claim.date}
                                         </div>
                                         <div className="text-sm text-gray-500">
-                                            Amount: ${claim.amount}
+                                            <span className="text-gray-900">Provider:</span> {claim.provider}
                                         </div>
                                         <div className="text-sm text-gray-500">
-                                            Status: {claim.status}
+                                            <span className="text-gray-900">Amount:</span> {claim.amount}
+                                        </div>
+                                        <div className="text-sm text-gray-500">
+                                            <span className="text-gray-900">Status:</span> {claim.status}
                                         </div>
                                     </div>
                                 ))}

@@ -35,15 +35,8 @@ To run the application locally, you will need to first setup the following:
 At this point, we have all the required setup to run the application locally. We have configured the runtime and the keys we need to authenticate and authorize the users.
 #### Configuration Setup
 To play with authorization and permissions, we will have to configure the following data in Clerk.com and Permit.io:
-1. In Clerk.com dashboard, go to `Users` and create the following four users (use the password you've chosen):
-    * `rick@sanchez.app`
-    * `morty@smith.app`
-    * `bird@person.app`
-    * `homer@simpson.app`
-2. For each user you've created, go to the `data/data.json` file in the repository and replace each user in the `users` object with the `user ID` from Clerk.com.
-    * To find the relevant User ID, go to the `Users` page in the Clerk.com dashboard, click on the user you want to configure and copy the `User ID` value from the profile page.
-3. Open the terminal in the repository's root folder and run `npm run config` to seed the permissions data to Permit.io.
-    * At this step, we configured all the relevant resources, actions, users, and roles in Permit.io.
+1. Open the terminal in the repository's root folder and run `npm run config` to seed the permissions data to Permit.io.
+    * At this step, we configured all the relevant resources, actions, and roles in Permit.io.
 
 At this point, we have configured all the data we need to run the application locally and play with the permissions.
 
@@ -113,6 +106,7 @@ Using the following endpoints, we have all we need to demonstrate the permission
 
 ### Application Flow
 To test the simplest application flow, let's perform the following steps:
+1. Signup with (at least) 2 accounts in the app, for example: `rick@sanchez.app` and `morty@smith.app`.
 1. Login to the app as `rick@sanchez.app`, as you can see in the dashboard you are able to view only rick's data.
 2. In the `Delegate Permissions` wizard, let first choose to share all the data, and then assign `Morty` as a caregiver.
 3. As you can see that Rick can give access only to their member groups members `Morty` and `Bird Person`.

@@ -1,9 +1,6 @@
 import { getAuth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
-import { promises as fs } from 'fs';
-import { Permit } from 'permitio';
-import { permit } from "@/app/api/authorizer";
+import { UserProfile, permit, permitProfile } from "@/app/api/authorizer";
 
 const GET = async (
     request: NextRequest,
@@ -20,12 +17,13 @@ const GET = async (
         return NextResponse.json({ error: 'Not allowed' }, { status: 403 });
     }
 
-    const jsonDirectory = path.join(process.cwd(), 'data');
-    const appData = await fs.readFile(jsonDirectory + '/data.json', 'utf8');
+    const user = await permit.api.users.get(uid);
+    const profile = permitProfile(user as UserProfile);
+
     return NextResponse.json({
+        ...profile,
         id: uid,
         relationship: 'Self',
-        ...JSON.parse(appData)?.users?.[uid]
     } || {});
 }
 
