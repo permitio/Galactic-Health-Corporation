@@ -36,7 +36,7 @@ export default authMiddleware({
     }
 
     if (user.status === 200 && pathname.indexOf('/welcome') >= 0) {
-      return NextResponse.redirect(`${protocol}//${host}`);
+      return NextResponse.redirect(new URL('/', url));
     }
 
     if (pathname.indexOf('/welcome') >= 0) {
@@ -44,7 +44,7 @@ export default authMiddleware({
     }
 
     if (!isPublicRoute) {
-      return NextResponse.redirect(`${protocol}//${host}/welcome`);
+      return NextResponse.redirect(new URL('/welcome', url));
     }
   },
 });
