@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 // See https://clerk.com/docs/nextjs/middleware for more information about configuring your middleware
 export default authMiddleware({
   publicRoutes: ["/api/account/dashboard/health-benefits"],
-  afterAuth: async ({ userId, session, isPublicRoute, ...auth }, { url, nextUrl: { protocol, host, pathname } }) => {
+  afterAuth: async ({ userId, session, isPublicRoute, ...auth }, { url }) => {
     // handle users who aren't authenticated
     if (!userId && !isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: url });
@@ -26,6 +26,8 @@ export default authMiddleware({
         'Content-Type': 'application/json',
       }
     });
+
+    const { pathname, protocol, host } = new URL(url);
 
     if (user.status === 200 && pathname.indexOf('/welcome') === -1) {
       return;
