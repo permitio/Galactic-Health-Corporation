@@ -205,14 +205,14 @@ const createRoleDerivations = async () => {
         granted_to: {
             users_with_role: [
                 {
-                    role: 'org_member',
-                    on_resource: 'member_group',
                     linked_by_relation: 'belongs',
+                    on_resource: 'member_group',
+                    role: 'org_member',
                 },
                 {
-                    role: 'caregiver',
-                    on_resource: 'member',
                     linked_by_relation: 'parent',
+                    on_resource: 'member',
+                    role: 'caregiver',
                 },
             ],
         },

@@ -31,6 +31,8 @@ const POST = async (
         lastName,
     });
 
+    let currentTime = new Date().getTime();
+
     const { key: createdUser } = await permit.api.syncUser({
         key: userId || '',
         first_name: firstName,
@@ -42,12 +44,18 @@ const POST = async (
         }
     });
 
+    console.log('Created User - Time: %d s', (new Date().getTime() - currentTime) / 1000);
+    currentTime = new Date().getTime();
+
     await permit.api.roleAssignments.assign({
         user: createdUser,
         role: 'owner',
         resource_instance: `member:member_${createdUser}`,
         tenant: 'default',
     });
+
+    console.log('Created Role Assignment - Time: %d s', (new Date().getTime() - currentTime) / 1000);
+    currentTime = new Date().getTime();
 
     await permit.api.relationshipTuples.create({
         subject: `member:member_${createdUser}`,
@@ -56,6 +64,9 @@ const POST = async (
         tenant: 'default',
     });
 
+    console.log('Created Profile Relationship Tuple - Time: %d s', (new Date().getTime() - currentTime) / 1000);
+    currentTime = new Date().getTime();
+
     await permit.api.relationshipTuples.create({
         subject: `member:member_${createdUser}`,
         relation: 'parent',
@@ -63,12 +74,18 @@ const POST = async (
         tenant: 'default',
     });
 
+    console.log('Created Health Plan Relationship Tuple - Time: %d s', (new Date().getTime() - currentTime) / 1000);
+    currentTime = new Date().getTime();
+
     await permit.api.relationshipTuples.create({
         subject: `member:member_${createdUser}`,
         relation: 'parent',
         object: `medical_records:medical_records_${createdUser}`,
         tenant: 'default',
     });
+
+    console.log('Created Medical Records Relationship Tuple - Time: %d s', (new Date().getTime() - currentTime) / 1000);
+    currentTime = new Date().getTime();
 
     return NextResponse.json({
         success: true,

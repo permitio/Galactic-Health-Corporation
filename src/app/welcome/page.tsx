@@ -5,7 +5,7 @@ import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { RedirectType } from 'next/dist/client/components/redirect';
 
 const Welcome = () => {
@@ -16,6 +16,7 @@ const Welcome = () => {
         dateOfBirth: dayjs().subtract(18, 'year'),
     });
     const [submitting, setSubmitting] = useState(false);
+    const router = useRouter();
 
     const handleChange = (e: any) => {
         const { name, value } = e.target;
@@ -50,7 +51,7 @@ const Welcome = () => {
             console.log(error);
         } finally {
             setSubmitting(false);
-            redirect('/plan', RedirectType.push);
+            router.push('/plan');
         }
     };
 
