@@ -5,8 +5,7 @@ import { Box, Button, Paper, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-import { redirect, useRouter } from 'next/navigation';
-import { RedirectType } from 'next/dist/client/components/redirect';
+import { useRouter } from 'next/navigation';
 
 const Welcome = () => {
     const [formState, setFormState] = useState({
@@ -51,6 +50,7 @@ const Welcome = () => {
             console.log(error);
         } finally {
             setSubmitting(false);
+            router.refresh();
             router.push('/plan');
         }
     };
