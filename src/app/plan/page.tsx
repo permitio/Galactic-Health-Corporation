@@ -73,54 +73,68 @@ const Dashboard = () => {
     const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
     useEffect(() => {
-        if (currentUser) {
+        const fetchDashboard = () => {
+            if (currentUser === null) {
+                return;
+            }
             setUserProfile(null);
             setHealthPlan(null);
             setMedicalRecords(null);
-            // Fetching user profile data
-            fetch(`/api/account/profile/${currentUser.id}`)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Network Error');
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    setUserProfile(data);
-                })
-                .catch((error) => {
-                    console.error(error);
-                    setUserProfile(null);
-                });
+            let up: UserProfile | null = null, hp: HealthPlan | null = null, mr: MedicalRecords | null = null;
+            Promise.all([
+                // Fetching user profile data
+                fetch(`/api/account/profile/${currentUser.id}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Network Error');
+                        }
+                        return response.json();
+                    })
+                    .then((data) => (up = data))
+                    .catch((error) => {
+                        console.error(error);
+                        up = null;
+                    }),
 
-            // Fetching health information
-            fetch(`/api/account/dashboard/health-plan/${currentUser.id}`)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Network Error');
-                    }
-                    return response.json();
-                })
-                .then((data) => setHealthPlan(data))
-                .catch((error) => {
-                    console.error(error);
-                    setHealthPlan(null);
-                });
+                // Fetching health information
+                fetch(`/api/account/dashboard/health-plan/${currentUser.id}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Network Error');
+                        }
+                        return response.json();
+                    })
+                    .then((data) => (hp = data))
+                    .catch((error) => {
+                        console.error(error);
+                        hp = null;
+                    }),
 
-            // Fetching health plan data
-            fetch(`/api/account/dashboard/medical-records/${currentUser.id}`)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error('Network Error');
-                    }
-                    return response.json();
-                })
-                .then((data) => setMedicalRecords(data))
-                .catch((error) => {
-                    console.error(error);
-                    setMedicalRecords(null);
-                });
-        }
+                // Fetching health plan data
+                fetch(`/api/account/dashboard/medical-records/${currentUser.id}`)
+                    .then((response) => {
+                        if (!response.ok) {
+                            throw new Error('Network Error');
+                        }
+                        return response.json();
+                    })
+                    .then((data) => (mr = data))
+                    .catch((error) => {
+                        console.error(error);
+                        mr = null;
+                    }),
+            ]).finally(() => {
+                console.log('All data fetched');
+                if (!up || (!hp && !mr && !up && currentUser.id === loggedInUser?.id)) {
+                    setTimeout(() => { fetchDashboard(); }, 5000);
+                } else {
+                    setUserProfile(up);
+                    setHealthPlan(hp);
+                    setMedicalRecords(mr);
+                }
+            });
+        };
+        fetchDashboard();
     }, [currentUser]);
 
     const personalBenefits = {
