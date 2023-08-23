@@ -74,7 +74,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         const fetchDashboard = () => {
-            if (currentUser === null) {
+            if (!currentUser?.id) {
                 return;
             }
             setUserProfile(null);
@@ -135,7 +135,7 @@ const Dashboard = () => {
             });
         };
         fetchDashboard();
-    }, [currentUser]);
+    }, [currentUser?.id, loggedInUser?.id]);
 
     const personalBenefits = {
         GymMembershipDiscount: '20% off',
