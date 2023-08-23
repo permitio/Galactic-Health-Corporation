@@ -25,7 +25,7 @@ const POST = async (
     const { userId } = getAuth(request) || '';
     const user = await clerkClient.users.getUser(userId || '');
     const { firstName, lastName, phoneNumber, dateOfBirth } = await request.json();
-    
+
     await clerkClient.users.updateUser(userId || '', {
         firstName,
         lastName,
@@ -58,23 +58,23 @@ const POST = async (
     currentTime = new Date().getTime();
 
     await Promise.all([
-    permit.api.relationshipTuples.create({
-        subject: `member:member_${createdUser}`,
-        relation: 'parent',
-        object: `profile:profile_${createdUser}`,
-        tenant: 'default',
-    }),
-    permit.api.relationshipTuples.create({
-        subject: `member:member_${createdUser}`,
-        relation: 'parent',
-        object: `health_plan:health_plan_${createdUser}`,
-        tenant: 'default',
-    }), permit.api.relationshipTuples.create({
-        subject: `member:member_${createdUser}`,
-        relation: 'parent',
-        object: `medical_records:medical_records_${createdUser}`,
-        tenant: 'default',
-    })]);
+        permit.api.relationshipTuples.create({
+            subject: `member:member_${createdUser}`,
+            relation: 'parent',
+            object: `profile:profile_${createdUser}`,
+            tenant: 'default',
+        }), permit.api.relationshipTuples.create({
+            subject: `member:member_${createdUser}`,
+            relation: 'parent',
+            object: `health_plan:health_plan_${createdUser}`,
+            tenant: 'default',
+        }), permit.api.relationshipTuples.create({
+            subject: `member:member_${createdUser}`,
+            relation: 'parent',
+            object: `medical_records:medical_records_${createdUser}`,
+            tenant: 'default',
+        })
+    ]);
 
     console.log('Created Medical Records Relationship Tuple - Time: %d s', (new Date().getTime() - currentTime) / 1000);
     currentTime = new Date().getTime();
