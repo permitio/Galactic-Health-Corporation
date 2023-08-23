@@ -5,6 +5,7 @@ require('dotenv').config({ path: '.env.local' });
 
 const permit = new Permit({
     token: process.env.PERMIT_SDK_KEY,
+    apiUrl: process.env.PERMIT_API_URL || 'https://api.permit.io',
 });
 
 const cleanEnv = async () => {
