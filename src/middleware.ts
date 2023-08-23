@@ -14,15 +14,15 @@ export default authMiddleware({
     if (!userId && !isPublicRoute) {
       return redirectToSignIn({ returnBackUrl: `${protocol}//${host}${pathname}` });
     }
-
-    const { project_id, environment_id } = await fetch('https://api.permit.io/v2/api-key/scope', {
+    const scopeUrl = `${process.env.PERMIT_API_URL || "https://api.permit.io"}/v2/api-key/scope`;
+    const { project_id, environment_id } = await fetch(scopeUrl, {
       headers: {
         'Authorization': `Bearer ${process.env.PERMIT_SDK_KEY}`,
         'Content-Type': 'application/json',
       }
     }).then(res => res.json());
 
-    const user = await fetch(`https://api.permit.io/v2/facts/${project_id}/${environment_id}/users/${userId}`, {
+    const user = await fetch(`${process.env.PERMIT_API_URL || "https://api.permit.io"}/v2/facts/${project_id}/${environment_id}/users/${userId}`, {
       headers: {
         'Authorization': `Bearer ${process.env.PERMIT_SDK_KEY}`,
         'Content-Type': 'application/json',
