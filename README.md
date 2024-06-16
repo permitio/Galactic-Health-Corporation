@@ -77,10 +77,10 @@ From the requirements and entities above, we can define the following permission
 
 | Resource | Actions | Relationship | Resource Roles | Derived Roles | Description |
 | --- | --- | --- | --- | --- | --- |
-| Member | View, Read | | Owner(read, write)<br />Caregiver(read) | | A root entity for all member related resources. |
-| Profile | View, Read | Member -> Parent</br>Member Group -> Belongs | Owner(read, write)<br />Caregiver(read) | Member:Caregiver<br />Member Group:Org Member | A member profile. |
-| Health Plan | View, Read | Member -> Parent | Owner(read, write)<br />Caregiver(read) | Member:Caregiver | A member health plan. |
-| Medical Records | View, Read | Member -> Parent | Owner(read, write)<br />Caregiver(read) | Member:Caregiver | A member medical records. |
+| Member | Write, Read | | Owner(read, write)<br />Caregiver(read) | | A root entity for all member related resources. |
+| Profile | Write, Read | Member -> Parent</br>Member Group -> Belongs | Owner(read, write)<br />Caregiver(read) | Member:Caregiver<br />Member Group:Org Member | A member profile. |
+| Health Plan | Write, Read | Member -> Parent | Owner(read, write)<br />Caregiver(read) | Member:Caregiver | A member health plan. |
+| Medical Records | Write, Read | Member -> Parent | Owner(read, write)<br />Caregiver(read) | Member:Caregiver | A member medical records. |
 | Member Group | List, Assign | | Admin(list, assign), Org Member(list) | | A member group. |
 | Benefits Pilot Group | View |  | Pilot Group Member(general role) | | A member group for benefits pilot. |
 

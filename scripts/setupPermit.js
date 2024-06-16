@@ -1,6 +1,4 @@
 const { Permit } = require('permitio');
-const fs = require('fs').promises;
-const path = require('path');
 require('dotenv').config({ path: '.env.local' });
 
 const permit = new Permit({
