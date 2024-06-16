@@ -256,7 +256,7 @@ const DELETE = async (request: NextRequest) => {
         );
     }
 
-    await permit.api.resourceInstances.delete(key);
+    await permit.api.resourceInstances.delete(`member_group:${key}`);
 
     return NextResponse.json({
         success: true,
