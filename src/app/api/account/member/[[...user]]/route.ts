@@ -4,10 +4,14 @@ import { UserProfile, permit, permitProfile } from '@/app/api/authorizer';
 
 const GET = async (
     request: NextRequest,
-    { params }: { params: { user: string[] } }) => {
+    { params }: { params: { user: string[] } },
+) => {
     const { userId } = getAuth(request) || '';
-    const users = await permit.api.listUsers();
-    
+    const usersReq = await permit.api.users.list({
+        perPage: 100,
+    });
+    const users = usersReq.data;
+
     const memberGroups = await permit.api.roleAssignments.list({
         user: userId || '',
         role: 'admin',
@@ -18,15 +22,18 @@ const GET = async (
     for (const group of memberGroups) {
         const groupMembers = await permit.api.roleAssignments.list({
             resourceInstance: group.resource_instance || '',
-            role: 'org_member'
+            role: 'org_member',
         });
-        filtered.push(...groupMembers.map((member) => member.user) || []);
+        filtered.push(...(groupMembers.map((member) => member.user) || []));
     }
 
     const allowed = Array.from(new Set(filtered));
 
     return NextResponse.json(
-        users.filter(({key}) => (key !== userId) && allowed.includes(key)).map((user) => (permitProfile(user as UserProfile))) || []);
-}
+        users
+            .filter(({ key }) => key !== userId && allowed.includes(key))
+            .map((user) => permitProfile(user as UserProfile)) || [],
+    );
+};
 
 export { GET };
