@@ -100,6 +100,7 @@ const DELETE = async (
     await permit.api.roleAssignments.unassign({
         user: uid,
         role: 'caregiver',
+        tenant: 'default',
         resource_instance: resourceInstance,
     });
 
