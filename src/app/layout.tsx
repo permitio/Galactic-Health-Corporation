@@ -35,40 +35,35 @@ export default function RootLayout({
                 <html lang="en">
                     <body className={inter.className}>
                         <SignedIn>
-                            <nav className="w-full">
-                                <div className="flex items-center justify-between pl-10 pr-10 lg:pr-0">
+                            <nav className="w-full" style={{direction: 'rtl'}}>
+                                <div className="flex items-center justify-between pr-10 pl-10 lg:pl-0">
                                     <div className="flex items-center flex-col flex-shrink-0 text-sky-600 py-2">
-                                        <div className="font-semibold text-5xl tracking-tight">
-                                            Galactic
-                                        </div>
-                                        <div className="font-semibold text-xl tracking-tight">
-                                            Health Corporation
-                                        </div>
+                                        <Image src="/maccabi.svg" width={130} height={130} alt="logo" />
                                     </div>
 
                                     <div className="block lg:hidden">
                                         <Menu />
                                     </div>
 
-                                    <div className="hidden lg:flex lg:items-center lg:w-auto ml-12 pr-10">
+                                    <div className="hidden lg:flex lg:items-center lg:w-auto mr-12 pl-10">
                                         <div className="text-sm lg:flex-grow font-semibold flex items-center">
                                             <Link
                                                 href="/plan"
-                                                className="block mt-4 lg:inline-block lg:mt-0 text-black mr-8"
+                                                className="block mt-4 lg:inline-block lg:mt-0 text-black ml-8"
                                             >
-                                                My Plan
+                                                התיק הרפואי שלי
                                             </Link>
                                             <Link
                                                 href="/invite"
-                                                className="block mt-4 lg:inline-block lg:mt-0 text-black mr-8"
+                                                className="block mt-4 lg:inline-block lg:mt-0 text-black ml-8"
                                             >
-                                                Delegate Permissions
+                                                ממשק ההרשאות
                                             </Link>
                                             <Link
                                                 href="/access"
-                                                className="block mt-4 lg:inline-block lg:mt-0 text-black mr-8"
+                                                className="block mt-4 lg:inline-block lg:mt-0 text-black ml-8"
                                             >
-                                                Control Access
+                                                בקרת גישה
                                             </Link>
                                         </div>
                                         <div>
